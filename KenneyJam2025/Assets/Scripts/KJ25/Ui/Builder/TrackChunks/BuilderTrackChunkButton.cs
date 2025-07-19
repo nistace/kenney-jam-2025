@@ -51,10 +51,10 @@ namespace KJ25.Ui.Builder.TrackChunks {
 
       private void RefreshCounters() {
          var consumedAmount = Level ? Level.CountConsumed(TrackChunk) : 0;
-         var interactable = Level && consumedAmount < TrackChunk.Amount;
+         var interactable = Level && (TrackChunk.Infinite || consumedAmount < TrackChunk.Amount);
 
          _button.interactable = interactable;
-         _amountText.text = Level ? $"{consumedAmount}/{TrackChunk.Amount}" : string.Empty;
+         _amountText.text = Level ? TrackChunk.Infinite ? $"{consumedAmount}/<size=120%>\\u221E</size>" : $"{consumedAmount}/{TrackChunk.Amount}" : string.Empty;
 
          if (!interactable) {
             GameController.Instance.HideTrackChunkGhost(TrackChunk);

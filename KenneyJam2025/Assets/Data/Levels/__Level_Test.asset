@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8a23d2a962d4e43a2a5446ef8f57ff3, type: 3}
-  m_Name: _Level_Test
+  m_Name: __Level_Test
   m_EditorClassIdentifier: 
   _levelPrefab: {fileID: 6915592496963063745, guid: 7a68e8175396ac6468a990d49c355c0b, type: 3}
   _trackChunkAmounts:
   - _chunk: {fileID: 11400000, guid: fc28b2c89059c7d41934febbda7897cc, type: 2}
-    _infinite: 0
+    _infinite: 1
     _amount: 10
   - _chunk: {fileID: 11400000, guid: ef5aff948f8679a4298713c445de68c7, type: 2}
     _infinite: 0
