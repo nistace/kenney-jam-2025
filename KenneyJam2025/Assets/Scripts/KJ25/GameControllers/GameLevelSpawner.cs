@@ -44,6 +44,8 @@ namespace KJ25.GameControllers {
                await UniTask.NextFrame(cancellationToken);
             }
 
+            await UniTask.NextFrame(cancellationToken);
+
             callback?.Invoke();
          }
 

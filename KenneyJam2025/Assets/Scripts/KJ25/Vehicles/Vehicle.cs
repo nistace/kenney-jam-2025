@@ -18,8 +18,11 @@ namespace KJ25.Vehicles {
          DistanceOnCurrentTrackChunk = 0;
          TryRefreshPositionOnCurrentTrackChunk();
          Launched = false;
-         _rigidbody.linearVelocity = Vector3.zero;
-         _rigidbody.angularVelocity = Vector3.zero;
+
+         if (!_rigidbody.isKinematic) {
+            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+         }
       }
 
       [ContextMenu("Launch")]

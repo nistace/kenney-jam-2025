@@ -11,7 +11,7 @@ namespace KJ25.Cameras {
       }
 
       private void Start() {
-         GameController.Instance.OnStateChanged.AddListener(HandleGameStateChanged);
+         GameController.OnStateChanged.AddListener(HandleGameStateChanged);
       }
 
       private void HandleGameStateChanged(GameController.State newState) {

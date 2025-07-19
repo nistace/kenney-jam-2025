@@ -22,17 +22,24 @@ namespace KJ25.Ui.Builder.TrackChunks {
 
       public void Setup(GameLevel level, TrackChunkAmount trackChunkAmount) {
          if (Level) {
-            Level.OnTrackChunkPlaced.RemoveListener(HandleTrackChunkPlaced);
+            Level.OnTrackChunkAdded.RemoveListener(HandleTrackChunkAdded);
             Level.OnTrackChunkRemoved.RemoveListener(HandleTrackChunkRemoved);
          }
 
          TrackChunk = trackChunkAmount;
          Level = level;
 
-         level.OnTrackChunkPlaced.AddListener(HandleTrackChunkPlaced);
+         level.OnTrackChunkAdded.AddListener(HandleTrackChunkAdded);
+         level.OnTrackChunkRemoved.AddListener(HandleTrackChunkRemoved);
 
          _chunkImage.sprite = trackChunkAmount.Chunk.Sprite;
          _chunkImage.transform.rotation = Quaternion.Euler(0, trackChunkAmount.Chunk.FlipSprite ? 180 : 0, 0);
+         RefreshCounters();
+      }
+
+      private void HandleTrackChunkAdded(TrackChunkAmount placedChunk) {
+         if (placedChunk != TrackChunk) return;
+
          RefreshCounters();
       }
 
@@ -52,12 +59,6 @@ namespace KJ25.Ui.Builder.TrackChunks {
          if (!interactable) {
             GameController.Instance.HideTrackChunkGhost(TrackChunk);
          }
-      }
-
-      private void HandleTrackChunkPlaced(TrackChunkAmount placedChunk) {
-         if (placedChunk != TrackChunk) return;
-
-         RefreshCounters();
       }
 
       private void HandleClick() {

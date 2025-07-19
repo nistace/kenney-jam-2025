@@ -10,7 +10,7 @@ namespace KJ25.Ui.Builder.TrackChunks {
       private List<BuilderTrackChunkButton> Buttons { get; } = new List<BuilderTrackChunkButton>();
 
       private void Start() {
-         GameController.Instance.OnCurrentLevelChanged.AddListener(HandleCurrentLevelChanged);
+         GameController.OnCurrentLevelChanged.AddListener(HandleCurrentLevelChanged);
       }
 
       private void HandleCurrentLevelChanged(LevelInfo levelInfo, GameLevel level) {

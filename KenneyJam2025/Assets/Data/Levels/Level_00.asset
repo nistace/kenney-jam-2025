@@ -17,21 +17,3 @@ MonoBehaviour:
   - _chunk: {fileID: 11400000, guid: fc28b2c89059c7d41934febbda7897cc, type: 2}
     _infinite: 0
     _amount: 5
-  - _chunk: {fileID: 11400000, guid: f2f0f94cf33e161429950d3d7504000d, type: 2}
-    _infinite: 0
-    _amount: 5
-  - _chunk: {fileID: 11400000, guid: 1c98381eb747c5949bf3c67187d178da, type: 2}
-    _infinite: 0
-    _amount: 5
-  - _chunk: {fileID: 11400000, guid: cf2218bcb68611546b9e49d480a1396a, type: 2}
-    _infinite: 0
-    _amount: 5
-  - _chunk: {fileID: 11400000, guid: 0a5cbd20571331d45b3c4d83f1105ac0, type: 2}
-    _infinite: 0
-    _amount: 5
-  - _chunk: {fileID: 11400000, guid: ef5aff948f8679a4298713c445de68c7, type: 2}
-    _infinite: 0
-    _amount: 5
-  - _chunk: {fileID: 11400000, guid: a362d2790d1559e44b16507cbe510004, type: 2}
-    _infinite: 0
-    _amount: 5

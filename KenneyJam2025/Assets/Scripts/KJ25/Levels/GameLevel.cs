@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using KJ25.GameControllers;
 using KJ25.Tracks;
 using KJ25.Vehicles;
 using Unity.Cinemachine;
@@ -14,7 +13,6 @@ namespace KJ25.Levels {
       [SerializeField] private CinemachineCamera _vehicleCamera;
       [SerializeField] private CinemachineCamera _buildCamera;
       [SerializeField] private Transform _buildCameraTarget;
-      [SerializeField] private LaunchButton _launchButton;
       [SerializeField] private TrackChunk _startTrackChunk;
       [SerializeField] private TrackChunk _endTrackChunk;
       [SerializeField] private Vehicle _playerVehicle;
@@ -27,7 +25,6 @@ namespace KJ25.Levels {
       public CinemachineCamera VehicleCamera => _vehicleCamera;
       public CinemachineCamera BuildCamera => _buildCamera;
 
-      public LaunchButton LaunchButton => _launchButton;
       public Vehicle PlayerVehicle => _playerVehicle;
       public LevelFinish Finish => _finish;
       public TrackChunk StartTrackChunk => _startTrackChunk;
@@ -37,8 +34,9 @@ namespace KJ25.Levels {
       private Dictionary<TrackChunkGhost, TrackChunkGhost> GhostInstances { get; } = new Dictionary<TrackChunkGhost, TrackChunkGhost>();
       private TrackChunkGhost CurrentGhostPrefab { get; set; }
 
-      public UnityEvent<TrackChunkAmount> OnTrackChunkPlaced { get; } = new UnityEvent<TrackChunkAmount>();
+      public UnityEvent<TrackChunkAmount> OnTrackChunkAdded { get; } = new UnityEvent<TrackChunkAmount>();
       public UnityEvent<TrackChunkAmount> OnTrackChunkRemoved { get; } = new UnityEvent<TrackChunkAmount>();
+      public UnityEvent OnTrackChanged { get; } = new UnityEvent();
 
       private TrackChunk EvaluateLastChunk() => PlacedTrackChunks.Count > 0 ? PlacedTrackChunks.Last() : _startTrackChunk;
 
@@ -48,7 +46,7 @@ namespace KJ25.Levels {
          }
 
          _playerVehicle.transform.SetParent(transform);
-         _playerVehicle.Respawn(_startTrackChunk);
+         RespawnPlayerVehicle();
       }
 
       public List<Transform> GetChildrenForSpawn() => _spawnData.GenerateRandomizedListOfChildren(transform);
@@ -76,14 +74,15 @@ namespace KJ25.Levels {
          PlacedTrackChunkAmounts.Add(trackChunkAmount);
          UpdateCurrentGhost();
 
-         OnTrackChunkPlaced.Invoke(trackChunkAmount);
+         OnTrackChunkAdded.Invoke(trackChunkAmount);
+         OnTrackChanged.Invoke();
 
          return true;
       }
 
-      public void RemoveLastTrackChunk() {
+      public bool RemoveLastTrackChunk() {
          if (PlacedTrackChunks.Count == 0) {
-            return;
+            return false;
          }
 
          var lastTrackChunk = PlacedTrackChunks.Last();
@@ -100,7 +99,10 @@ namespace KJ25.Levels {
 
          Destroy(lastTrackChunk.gameObject);
 
-         OnTrackChunkPlaced.Invoke(removedTrackChunkAmount);
+         OnTrackChunkRemoved.Invoke(removedTrackChunkAmount);
+         OnTrackChanged.Invoke();
+
+         return true;
       }
 
       public TrackChunkGhost SetGhost(TrackChunkGhost chunkGhostPrefab) {
@@ -165,5 +167,8 @@ namespace KJ25.Levels {
       }
 
       public int CountConsumed(TrackChunkAmount trackChunk) => PlacedTrackChunkAmounts.Count(t => t == trackChunk);
+      public bool HasAddedTrackChunks() => PlacedTrackChunks.Count > 0;
+
+      public void RespawnPlayerVehicle() => _playerVehicle.Respawn(_startTrackChunk);
    }
 }

@@ -8,9 +8,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 585490855931086674, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6d1189648eacf8843b76d82815d1059b, type: 3}
+    - target: {fileID: 5502110497354120946, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 77e758ac303429942852e63595ea8cc8, type: 2}
     - target: {fileID: 5609905011891985702, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
       propertyPath: m_Name
-      value: LaunchButton
+      value: ResetButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917918416538935036, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.061
+      objectReference: {fileID: 0}
+    - target: {fileID: 5917918416538935036, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6961906681803269090, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,6 +68,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7818618755806984413, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 77e758ac303429942852e63595ea8cc8, type: 2}
     - target: {fileID: 8385757649465544162, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -59,26 +79,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5609905011891985702, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8446588214209700733}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
---- !u!1 &4797913602888961177 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5609905011891985702, guid: fa6830d47a9008f4dbeb090b95945a5c, type: 3}
-  m_PrefabInstance: {fileID: 1103381782452457919}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8446588214209700733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4797913602888961177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f73be5dc8b51493f97342ea8554f548b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _vehicleToLaunch: {fileID: 0}

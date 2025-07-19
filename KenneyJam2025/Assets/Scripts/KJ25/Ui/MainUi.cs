@@ -8,11 +8,11 @@ namespace KJ25.Ui {
       [SerializeField] private Animator _animator;
 
       private void Start() {
-         GameController.Instance.OnStateChanged.AddListener(HandleGameStateChanged);
+         GameController.OnStateChanged.AddListener(HandleGameStateChanged);
       }
 
       private void OnDestroy() {
-         GameController.Instance.OnStateChanged.RemoveListener(HandleGameStateChanged);
+         GameController.OnStateChanged.RemoveListener(HandleGameStateChanged);
       }
 
       private void HandleGameStateChanged(GameController.State newState) {
