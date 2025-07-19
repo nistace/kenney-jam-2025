@@ -11,5 +11,6 @@ namespace KJ25.Tracks {
       public TrackChunk ChunkPrefab => _chunkPrefab;
       public TrackChunkGhost Ghost => _ghost;
       public Sprite Sprite => _sprite;
+      public bool FlipSprite => _flipSprite;
    }
 }

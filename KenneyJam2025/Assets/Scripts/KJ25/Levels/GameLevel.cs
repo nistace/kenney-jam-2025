@@ -6,6 +6,7 @@ using KJ25.Tracks;
 using KJ25.Vehicles;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace KJ25.Levels {
    public class GameLevel : MonoBehaviour {
@@ -35,6 +36,9 @@ namespace KJ25.Levels {
       private List<TrackChunk> PlacedTrackChunks { get; } = new List<TrackChunk>();
       private Dictionary<TrackChunkGhost, TrackChunkGhost> GhostInstances { get; } = new Dictionary<TrackChunkGhost, TrackChunkGhost>();
       private TrackChunkGhost CurrentGhostPrefab { get; set; }
+
+      public UnityEvent<TrackChunkAmount> OnTrackChunkPlaced { get; } = new UnityEvent<TrackChunkAmount>();
+      public UnityEvent<TrackChunkAmount> OnTrackChunkRemoved { get; } = new UnityEvent<TrackChunkAmount>();
 
       private TrackChunk EvaluateLastChunk() => PlacedTrackChunks.Count > 0 ? PlacedTrackChunks.Last() : _startTrackChunk;
 
@@ -71,6 +75,9 @@ namespace KJ25.Levels {
          PlacedTrackChunks.Add(newTrackChunk);
          PlacedTrackChunkAmounts.Add(trackChunkAmount);
          UpdateCurrentGhost();
+
+         OnTrackChunkPlaced.Invoke(trackChunkAmount);
+
          return true;
       }
 
@@ -80,6 +87,7 @@ namespace KJ25.Levels {
          }
 
          var lastTrackChunk = PlacedTrackChunks.Last();
+         var removedTrackChunkAmount = PlacedTrackChunkAmounts.Last();
          PlacedTrackChunks.RemoveAt(PlacedTrackChunks.Count - 1);
          PlacedTrackChunkAmounts.RemoveAt(PlacedTrackChunkAmounts.Count - 1);
 
@@ -91,6 +99,8 @@ namespace KJ25.Levels {
          UpdateCurrentGhost();
 
          Destroy(lastTrackChunk.gameObject);
+
+         OnTrackChunkPlaced.Invoke(removedTrackChunkAmount);
       }
 
       public TrackChunkGhost SetGhost(TrackChunkGhost chunkGhostPrefab) {
@@ -153,5 +163,7 @@ namespace KJ25.Levels {
             return result;
          }
       }
+
+      public int CountConsumed(TrackChunkAmount trackChunk) => PlacedTrackChunkAmounts.Count(t => t == trackChunk);
    }
 }

@@ -22,7 +22,7 @@ namespace KJ25.Ui.Builder.TrackChunks {
             }
 
             var button = Buttons[index];
-            button.Setup(trackChunkAmount);
+            button.Setup(level, trackChunkAmount);
             button.gameObject.SetActive(true);
          }
 
