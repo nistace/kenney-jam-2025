@@ -30,7 +30,7 @@ namespace KJ25.GameControllers {
       private State CurrentState { get; set; }
       private int CurrentLevelIndex { get; set; }
       public GameLevel CurrentLevel { get; private set; }
-      public static UnityEvent<LevelInfo, GameLevel> OnCurrentLevelChanged { get; } = new UnityEvent<LevelInfo, GameLevel>();
+      public static UnityEvent<int, GameLevel> OnCurrentLevelChanged { get; } = new UnityEvent<int, GameLevel>();
       public static UnityEvent<GameLevel> OnCurrentLevelTrackChanged { get; } = new UnityEvent<GameLevel>();
       public static UnityEvent<State> OnStateChanged { get; } = new UnityEvent<State>();
 
@@ -38,10 +38,7 @@ namespace KJ25.GameControllers {
          Instance = this;
       }
 
-      private void Start() {
-         CurrentLevelIndex = 0;
-         SpawnLevel(_levelsInfo.Levels[CurrentLevelIndex]);
-      }
+      private void Start() => SpawnLevel(0);
 
       private void CleanUpCurrentLevel() {
          if (CurrentLevel) {
@@ -51,22 +48,23 @@ namespace KJ25.GameControllers {
          }
       }
 
-      private void SpawnLevel(LevelInfo levelInfo) {
+      private void SpawnLevel(int index) {
          CleanUpCurrentLevel();
 
-         CurrentLevel = Instantiate(levelInfo.LevelPrefab);
+         CurrentLevelIndex = index;
+         CurrentLevel = Instantiate(_levelsInfo[index]);
          CurrentLevel.Finish.OnEntered.AddListener(HandleCurrentLevelFinishEntered);
          CurrentLevel.OnTrackChanged.AddListener(HandleTrackChanged);
 
          _levelSpawner.Spawn(CurrentLevel, StartBuilderState).Forget();
          ChangeState(State.SpawningLevel);
-         OnCurrentLevelChanged.Invoke(levelInfo, CurrentLevel);
+         OnCurrentLevelChanged.Invoke(CurrentLevelIndex, CurrentLevel);
       }
 
       private void HandleTrackChanged() => OnCurrentLevelTrackChanged.Invoke(CurrentLevel);
 
       private void StartBuilderState() {
-         CurrentLevel.RespawnPlayerVehicle();
+         CurrentLevel.ResetGameLevel();
          ChangeState(State.Building);
       }
 
@@ -89,12 +87,10 @@ namespace KJ25.GameControllers {
       private void ContinueToNextLevel() {
          CleanUpCurrentLevel();
 
-         CurrentLevelIndex++;
-         CurrentLevelIndex %= _levelsInfo.Levels.Length;
-         SpawnLevel(_levelsInfo.Levels[CurrentLevelIndex]);
+         SpawnLevel((CurrentLevelIndex + 1) % _levelsInfo.Levels.Length);
       }
 
-      private void SpawnCurrentLevel() => SpawnLevel(_levelsInfo.Levels[CurrentLevelIndex]);
+      private void SpawnCurrentLevel() => SpawnLevel(CurrentLevelIndex);
 
       public void AppendTrackChunk(TrackChunkAmount trackChunk) {
          CurrentLevel.AppendTrackChunk(trackChunk);
@@ -107,7 +103,7 @@ namespace KJ25.GameControllers {
       private bool Launch() {
          if (!CanPerform(Action.Launch)) return false;
 
-         CurrentLevel.PlayerVehicle.Launch();
+         CurrentLevel.LaunchPlayerVehicle();
          ChangeState(State.Playing);
 
          return true;

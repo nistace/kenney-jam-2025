@@ -13,9 +13,9 @@ namespace KJ25.Ui.Builder.TrackChunks {
          GameController.OnCurrentLevelChanged.AddListener(HandleCurrentLevelChanged);
       }
 
-      private void HandleCurrentLevelChanged(LevelInfo levelInfo, GameLevel level) {
-         for (var index = 0; index < levelInfo.TrackChunkAmounts.Length; index++) {
-            var trackChunkAmount = levelInfo.TrackChunkAmounts[index];
+      private void HandleCurrentLevelChanged(int levelIndex, GameLevel level) {
+         for (var index = 0; index < level.TrackChunkAmounts.Count; index++) {
+            var trackChunkAmount = level.TrackChunkAmounts[index];
 
             if (index >= Buttons.Count) {
                Buttons.Add(Instantiate(_buttonPrefab, transform));
@@ -26,7 +26,7 @@ namespace KJ25.Ui.Builder.TrackChunks {
             button.gameObject.SetActive(true);
          }
 
-         for (var index = levelInfo.TrackChunkAmounts.Length; index < Buttons.Count; index++) {
+         for (var index = level.TrackChunkAmounts.Count; index < Buttons.Count; index++) {
             Buttons[index].gameObject.SetActive(false);
          }
       }

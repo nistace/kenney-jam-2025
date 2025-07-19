@@ -229,6 +229,18 @@ PrefabInstance:
       value: 12.01957
       objectReference: {fileID: 0}
     - target: {fileID: 3229059586463605043, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.3835173
+      objectReference: {fileID: 0}
+    - target: {fileID: 3229059586463605043, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.019366503
+      objectReference: {fileID: 0}
+    - target: {fileID: 3229059586463605043, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.9286604
+      objectReference: {fileID: 0}
+    - target: {fileID: 3229059586463605043, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -406,6 +418,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: dab01c8b16af92b4cb911c46af72960c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3b785441629700047b9b061a54e1e072, type: 2}
     - target: {fileID: 919132149155446097, guid: dab01c8b16af92b4cb911c46af72960c, type: 3}
       propertyPath: m_Name
       value: track-road-narrow-looping

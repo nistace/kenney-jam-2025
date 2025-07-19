@@ -46,6 +46,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae280b9111bb42f4b9e13d06bc37cd78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _renderer: {fileID: 4889778965333138252}
+  _emissionColor: {r: 1, g: 1, b: 1, a: 1}
+  _fadeEmissionColor: {r: 0, g: 0, b: 0, a: 1}
+  _emissionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 2.259067
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7448628
+      value: 0.15408848
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.948818
+      value: 2.259067
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 1
+    m_PostInfinity: 1
+    m_RotationOrder: 4
+  _collectedEmissionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 2
+      inSlope: 233.70935
+      outSlope: 233.70935
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.021198016
+      value: 6.9541745
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7
+      value: -1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!65 &7534622427712052332
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -128,6 +197,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 480c2d690890ea34793f1a25aa6d1ff4, type: 3}
+--- !u!23 &4889778965333138252 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 480c2d690890ea34793f1a25aa6d1ff4, type: 3}
+  m_PrefabInstance: {fileID: 6060272444633597896}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6021542308577812515 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 480c2d690890ea34793f1a25aa6d1ff4, type: 3}

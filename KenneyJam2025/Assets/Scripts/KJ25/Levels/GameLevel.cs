@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KJ25.PowerUps;
 using KJ25.Tracks;
 using KJ25.Vehicles;
 using Unity.Cinemachine;
@@ -9,15 +10,21 @@ using UnityEngine.Events;
 
 namespace KJ25.Levels {
    public class GameLevel : MonoBehaviour {
+      [Header("Cameras")]
       [SerializeField] private CinemachineCamera _wholeLevelCameraAnchor;
       [SerializeField] private CinemachineCamera _vehicleCamera;
       [SerializeField] private CinemachineCamera _buildCamera;
       [SerializeField] private Transform _buildCameraTarget;
+
+      [Header("Track and vehicle")]
       [SerializeField] private TrackChunk _startTrackChunk;
+      [SerializeField] private GameObject _startBlocker;
       [SerializeField] private TrackChunk _endTrackChunk;
       [SerializeField] private Vehicle _playerVehicle;
       [SerializeField] private LevelFinish _finish;
+      [SerializeField] private TrackChunkAmount[] _trackChunkAmounts;
 
+      [Header("Animated")]
       [SerializeField] private SpawnData _spawnData;
       [SerializeField] private SpawnData _despawnData;
 
@@ -25,14 +32,13 @@ namespace KJ25.Levels {
       public CinemachineCamera VehicleCamera => _vehicleCamera;
       public CinemachineCamera BuildCamera => _buildCamera;
 
-      public Vehicle PlayerVehicle => _playerVehicle;
       public LevelFinish Finish => _finish;
       public TrackChunk StartTrackChunk => _startTrackChunk;
-
       private List<TrackChunkAmount> PlacedTrackChunkAmounts { get; } = new List<TrackChunkAmount>();
       private List<TrackChunk> PlacedTrackChunks { get; } = new List<TrackChunk>();
       private Dictionary<TrackChunkGhost, TrackChunkGhost> GhostInstances { get; } = new Dictionary<TrackChunkGhost, TrackChunkGhost>();
       private TrackChunkGhost CurrentGhostPrefab { get; set; }
+      public IReadOnlyList<TrackChunkAmount> TrackChunkAmounts => _trackChunkAmounts;
 
       public UnityEvent<TrackChunkAmount> OnTrackChunkAdded { get; } = new UnityEvent<TrackChunkAmount>();
       public UnityEvent<TrackChunkAmount> OnTrackChunkRemoved { get; } = new UnityEvent<TrackChunkAmount>();
@@ -46,7 +52,7 @@ namespace KJ25.Levels {
          }
 
          _playerVehicle.transform.SetParent(transform);
-         RespawnPlayerVehicle();
+         ResetGameLevel();
       }
 
       public List<Transform> GetChildrenForSpawn() => _spawnData.GenerateRandomizedListOfChildren(transform);
@@ -169,6 +175,17 @@ namespace KJ25.Levels {
       public int CountConsumed(TrackChunkAmount trackChunk) => PlacedTrackChunkAmounts.Count(t => t == trackChunk);
       public bool HasAddedTrackChunks() => PlacedTrackChunks.Count > 0;
 
-      public void RespawnPlayerVehicle() => _playerVehicle.Respawn(_startTrackChunk);
+      public void ResetGameLevel() {
+         foreach (var powerUp in GetComponentsInChildren<PowerUp>()) {
+            powerUp.ResetPower(false);
+         }
+         _startBlocker.SetActive(true);
+         _playerVehicle.Respawn(_startTrackChunk);
+      }
+
+      public void LaunchPlayerVehicle() {
+         _startBlocker.SetActive(false);
+         _playerVehicle.Launch();
+      }
    }
 }
