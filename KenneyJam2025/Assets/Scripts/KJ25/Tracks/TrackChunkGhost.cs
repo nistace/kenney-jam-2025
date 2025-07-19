@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace KJ25.Tracks {
@@ -9,9 +10,13 @@ namespace KJ25.Tracks {
       [SerializeField] private BoxCollider[] _colliders;
       [SerializeField] private LayerMask _collisionMask;
 
-      private static Collider[] overlapNonAllocResult { get; } = new Collider[1];
+      private static Collider[] overlapNonAllocResult { get; } = new Collider[20];
 
       public bool IsValid { get; private set; }
+
+      private void Update() {
+         RefreshValid();
+      }
 
       public void RefreshValid() {
          IsValid = !HasCollisions();
@@ -26,7 +31,18 @@ namespace KJ25.Tracks {
       private bool HasCollisionsFrom(BoxCollider box) {
          var worldCenter = box.transform.TransformPoint(box.center);
          var halfSize = Vector3.Scale(box.size * 0.5f, box.transform.lossyScale);
-         return Physics.OverlapBoxNonAlloc(worldCenter, halfSize, overlapNonAllocResult, box.transform.rotation, _collisionMask) > 0;
+         var collisions = Physics.OverlapBoxNonAlloc(worldCenter, halfSize, overlapNonAllocResult, box.transform.rotation, _collisionMask, QueryTriggerInteraction.Ignore);
+         for (var i = 0; i < collisions; i++) {
+            if (!overlapNonAllocResult[i].transform.IsChildOf(transform)) {
+               return true;
+            }
+         }
+         return false;
+      }
+
+      [ContextMenu("Reset Colliders")]
+      private void ResetColliders() {
+         _colliders = GetComponentsInChildren<BoxCollider>().Where(t => t.gameObject.layer == LayerMask.NameToLayer("GhostColliders")).ToArray();
       }
    }
 }

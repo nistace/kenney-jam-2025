@@ -17,6 +17,8 @@ namespace KJ25.GameControllers {
 
          _vehicleToLaunch.Launch();
          Consumed = true;
+
+         OnConsumed.Invoke();
       }
 
       public void HandlePointerEnter() { }

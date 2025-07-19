@@ -25,7 +25,7 @@ namespace KJ25.Tracks.Editor {
             var indexToDestroy = 0;
             while (ghost.transform.childCount > indexToDestroy) {
                var child = ghost.transform.GetChild(indexToDestroy);
-               if (child.GetComponent<Renderer>()) {
+               if (child.GetComponent<Renderer>() || child.gameObject.layer == LayerMask.NameToLayer("GhostColliders") && child.GetComponent<BoxCollider>()) {
                   Undo.DestroyObjectImmediate(child.gameObject);
                }
                else {
@@ -39,6 +39,8 @@ namespace KJ25.Tracks.Editor {
             instance.transform.localScale = Vector3.one;
 
             var allRenderers = instance.GetComponentsInChildren<Renderer>();
+            var allColliders = instance.GetComponentsInChildren<BoxCollider>().Where(t => t.gameObject.layer == LayerMask.NameToLayer("Obstacles")).ToArray();
+
             serializedObject.Update();
 
             target.name = $"TrackChunkGhost_{TrackChunk.name.Split("TrackChunk_").Last()}";
@@ -55,11 +57,19 @@ namespace KJ25.Tracks.Editor {
                renderer.transform.SetParent(ghost.transform);
             }
 
+            var collidersProperty = serializedObject.FindProperty("_colliders");
+            collidersProperty.arraySize = allColliders.Length;
+
+            for (var index = 0; index < allColliders.Length; index++) {
+               var ghostCollider = allColliders[index];
+               ghostCollider.gameObject.layer = LayerMask.NameToLayer("GhostColliders");
+               collidersProperty.GetArrayElementAtIndex(index).objectReferenceValue = ghostCollider;
+               ghostCollider.transform.SetParent(ghost.transform);
+            }
+
             serializedObject.ApplyModifiedProperties();
 
-            if (!instance.GetComponent<Renderer>()) {
-               DestroyImmediate(instance);
-            }
+            DestroyImmediate(instance);
          }
       }
    }

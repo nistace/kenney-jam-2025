@@ -39,5 +39,16 @@ namespace KJ25.Tracks {
             _curveLength = newLength;
          }
       }
+
+      private void OnDrawGizmos() {
+         if (_nextChunkAnchor) {
+            Gizmos.color = Color.cyan;
+            Gizmos.matrix = _nextChunkAnchor.localToWorldMatrix;
+            Gizmos.DrawLine(Vector3.zero, Vector3.forward);
+            Gizmos.DrawLine((Vector3.forward + Vector3.left) * .5f, Vector3.forward);
+            Gizmos.DrawLine((Vector3.forward + Vector3.right) * .5f, Vector3.forward);
+            Gizmos.DrawSphere(Vector3.zero, .3f);
+         }
+      }
    }
 }

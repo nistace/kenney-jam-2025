@@ -25,6 +25,7 @@ namespace KJ25.GameControllers {
          [SerializeField] private float _startDuration = 1;
          [SerializeField] private AnimationCurve _itemScaleCurve;
          [SerializeField] private float _itemDuration = .2f;
+         [SerializeField] private float _finalValue;
 
          public async UniTask PerformOnItems(IReadOnlyList<Transform> items, CancellationToken cancellationToken, UnityAction callback) {
             await UniTask.WaitForSeconds(_delay, cancellationToken: cancellationToken);
@@ -51,6 +52,7 @@ namespace KJ25.GameControllers {
                item.localScale = Vector3.one * _itemScaleCurve.Evaluate(t / _itemDuration);
                await UniTask.NextFrame(cancellationToken);
             }
+            item.localScale = Vector3.one * _finalValue;
          }
       }
    }

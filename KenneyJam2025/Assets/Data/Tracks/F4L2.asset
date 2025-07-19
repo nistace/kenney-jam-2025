@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00a2f0cd30784b4b8b030f801a683857, type: 3}
-  m_Name: F4R2
+  m_Name: F4L2
   m_EditorClassIdentifier: 
-  _chunkPrefab: {fileID: 4379217630498286330, guid: 988f56e108d97004da59f95f56f6e156, type: 3}
-  _ghost: {fileID: 8501650708344472393, guid: 2d9d78e16a4365a478242acf40b50aa7, type: 3}
+  _chunkPrefab: {fileID: 3464752772557238291, guid: ba15c8f3c96f0254585475360e3b4f2d, type: 3}
+  _ghost: {fileID: 708720316256780436, guid: 8f696229e87c3ca409f0c0e95b8c6b69, type: 3}
   _sprite: {fileID: 21300000, guid: 85c264116be08e04db8a301e547bbfc8, type: 3}
+  _flipSprite: 1

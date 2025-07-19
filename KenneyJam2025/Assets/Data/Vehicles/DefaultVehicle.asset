@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxSpeed: 10
   _deceleration: 4
-  _maxPower: 3
+  _maxPower: 3000
   _powerForSpeedCost: 1
   _decelerationCoefficientPerForwardAngleWithUp:
     serializedVersion: 2

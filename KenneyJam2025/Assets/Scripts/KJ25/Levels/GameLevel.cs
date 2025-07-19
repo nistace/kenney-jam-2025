@@ -4,11 +4,15 @@ using System.Linq;
 using KJ25.GameControllers;
 using KJ25.Tracks;
 using KJ25.Vehicles;
+using Unity.Cinemachine;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace KJ25.Levels {
    public class GameLevel : MonoBehaviour {
+      [SerializeField] private CinemachineCamera _wholeLevelCameraAnchor;
+      [SerializeField] private CinemachineCamera _vehicleCamera;
+      [SerializeField] private CinemachineCamera _buildCamera;
+      [SerializeField] private Transform _buildCameraTarget;
       [SerializeField] private LaunchButton _launchButton;
       [SerializeField] private TrackChunk _startTrackChunk;
       [SerializeField] private TrackChunk _endTrackChunk;
@@ -17,6 +21,10 @@ namespace KJ25.Levels {
 
       [SerializeField] private SpawnData _spawnData;
       [SerializeField] private SpawnData _despawnData;
+
+      public CinemachineCamera WholeLevelCameraAnchor => _wholeLevelCameraAnchor;
+      public CinemachineCamera VehicleCamera => _vehicleCamera;
+      public CinemachineCamera BuildCamera => _buildCamera;
 
       public LaunchButton LaunchButton => _launchButton;
       public Vehicle PlayerVehicle => _playerVehicle;
@@ -31,8 +39,8 @@ namespace KJ25.Levels {
       private TrackChunk EvaluateLastChunk() => PlacedTrackChunks.Count > 0 ? PlacedTrackChunks.Last() : _startTrackChunk;
 
       private void Awake() {
-         for (var childIndex = 0; childIndex < transform.childCount; childIndex++) {
-            transform.GetChild(childIndex).localScale = Vector3.zero;
+         foreach (var spawnableChild in GetChildrenForSpawn()) {
+            spawnableChild.localScale = Vector3.zero;
          }
 
          _playerVehicle.transform.SetParent(transform);
@@ -42,7 +50,12 @@ namespace KJ25.Levels {
       public List<Transform> GetChildrenForSpawn() => _spawnData.GenerateRandomizedListOfChildren(transform);
       public List<Transform> GetChildrenForDespawn() => _despawnData.GenerateRandomizedListOfChildren(transform);
 
-      public void AppendTrackChunk(TrackChunkAmount trackChunkAmount) {
+      public bool AppendTrackChunk(TrackChunkAmount trackChunkAmount) {
+         var ghost = SetGhost(trackChunkAmount.Chunk.Ghost);
+         if (!ghost.IsValid) {
+            return false;
+         }
+
          var lastChunk = EvaluateLastChunk();
 
          var newTrackChunk = Instantiate(trackChunkAmount.Chunk.ChunkPrefab, lastChunk.NextChunkAnchor.position, lastChunk.NextChunkAnchor.rotation, transform);
@@ -53,9 +66,12 @@ namespace KJ25.Levels {
             newTrackChunk.NextChunk = _endTrackChunk;
          }
 
+         _buildCameraTarget.position = newTrackChunk.NextChunkAnchor.position;
+
          PlacedTrackChunks.Add(newTrackChunk);
          PlacedTrackChunkAmounts.Add(trackChunkAmount);
          UpdateCurrentGhost();
+         return true;
       }
 
       public void RemoveLastTrackChunk() {
@@ -67,13 +83,17 @@ namespace KJ25.Levels {
          PlacedTrackChunks.RemoveAt(PlacedTrackChunks.Count - 1);
          PlacedTrackChunkAmounts.RemoveAt(PlacedTrackChunkAmounts.Count - 1);
 
-         EvaluateLastChunk().NextChunk = null;
+         var newLastChunk = EvaluateLastChunk();
+         newLastChunk.NextChunk = null;
+
+         _buildCameraTarget.position = newLastChunk.NextChunkAnchor.position;
+
          UpdateCurrentGhost();
 
          Destroy(lastTrackChunk.gameObject);
       }
 
-      public void SetGhost(TrackChunkGhost chunkGhostPrefab) {
+      public TrackChunkGhost SetGhost(TrackChunkGhost chunkGhostPrefab) {
          UnsetGhost();
 
          if (!GhostInstances.TryGetValue(chunkGhostPrefab, out var chunkGhost)) {
@@ -85,6 +105,8 @@ namespace KJ25.Levels {
          CurrentGhostPrefab = chunkGhostPrefab;
 
          UpdateCurrentGhost();
+
+         return chunkGhost;
       }
 
       public void UnsetGhost(TrackChunkGhost chunkGhostPrefab = null) {
@@ -119,12 +141,13 @@ namespace KJ25.Levels {
       private class SpawnData {
          [SerializeField] private Transform[] _spawnedFirst;
          [SerializeField] private Transform[] _spawnedLast;
+         [SerializeField] private Transform[] _notToSpawn;
 
          public List<Transform> GenerateRandomizedListOfChildren(Transform parent) {
             var result = new List<Transform>();
 
             result.AddRange(_spawnedFirst);
-            result.AddRange(Enumerable.Range(0, parent.childCount).Select(parent.GetChild).Except(_spawnedFirst).Except(_spawnedLast));
+            result.AddRange(Enumerable.Range(0, parent.childCount).Select(parent.GetChild).Except(_spawnedFirst).Except(_spawnedLast).Except(_notToSpawn));
             result.AddRange(_spawnedLast);
 
             return result;

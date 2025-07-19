@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: F4Up
   m_EditorClassIdentifier: 
   _chunkPrefab: {fileID: 2212984774191572792, guid: ad38f8c8178c6df49a1052cf9e835901, type: 3}
-  _ghost: {fileID: 5262482133256409893, guid: d1a9a5e1ff72ca6499d9721df55efa58, type: 3}
+  _ghost: {fileID: 6392135954056118470, guid: 5fa4d9a52b82cf9428271f2c986f2f03, type: 3}
   _sprite: {fileID: 21300000, guid: 2f12d7664784d1448a2b5813c35c11ab, type: 3}
+  _flipSprite: 0

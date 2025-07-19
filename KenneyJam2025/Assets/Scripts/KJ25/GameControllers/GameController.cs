@@ -27,7 +27,7 @@ namespace KJ25.GameControllers {
 
       private State CurrentState { get; set; }
       private int CurrentLevelIndex { get; set; }
-      private GameLevel CurrentLevel { get; set; }
+      public GameLevel CurrentLevel { get; private set; }
       private GameObject PointerHitObject { get; set; }
       private ILevelInteractable HoveredOverInteractable { get; set; }
       public UnityEvent<LevelInfo, GameLevel> OnCurrentLevelChanged { get; } = new UnityEvent<LevelInfo, GameLevel>();
@@ -123,7 +123,9 @@ namespace KJ25.GameControllers {
          }
       }
 
-      public void AppendTrackChunk(TrackChunkAmount trackChunk) => CurrentLevel.AppendTrackChunk(trackChunk);
+      public void AppendTrackChunk(TrackChunkAmount trackChunk) {
+         CurrentLevel.AppendTrackChunk(trackChunk);
+      }
 
       public void ShowTrackChunkGhost(TrackChunkAmount trackChunk) => CurrentLevel.SetGhost(trackChunk.Chunk.Ghost);
 

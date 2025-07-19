@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: L4
   m_EditorClassIdentifier: 
   _chunkPrefab: {fileID: 8820384030494789291, guid: c4909a31751162f44a784acc8a5c9d5f, type: 3}
-  _ghost: {fileID: 3106234262418557349, guid: b6ac5fb04e8f05c47afbe91e68cf997a, type: 3}
+  _ghost: {fileID: 7237046773817012647, guid: c0aaffa9389677b48b3d59444cbd9f85, type: 3}
   _sprite: {fileID: 21300000, guid: 724b4cc89d5de8c46851443f525e6996, type: 3}
+  _flipSprite: 1
