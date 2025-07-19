@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00a2f0cd30784b4b8b030f801a683857, type: 3}
+  m_Name: F4Up
+  m_EditorClassIdentifier: 
+  _chunkPrefab: {fileID: 2212984774191572792, guid: ad38f8c8178c6df49a1052cf9e835901, type: 3}
+  _ghost: {fileID: 5262482133256409893, guid: d1a9a5e1ff72ca6499d9721df55efa58, type: 3}
+  _sprite: {fileID: 21300000, guid: 2f12d7664784d1448a2b5813c35c11ab, type: 3}

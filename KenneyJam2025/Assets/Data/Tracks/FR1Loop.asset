@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00a2f0cd30784b4b8b030f801a683857, type: 3}
+  m_Name: FR1Loop
+  m_EditorClassIdentifier: 
+  _chunkPrefab: {fileID: 2212984774191572792, guid: 13fd6b0af7dc9974e91912c96835aed2, type: 3}
+  _ghost: {fileID: 3753322643439992285, guid: 87a52fc65bd2da54b8d168b291f0e3a7, type: 3}
+  _sprite: {fileID: 21300000, guid: a2164416beac5ea419caec926387df1b, type: 3}

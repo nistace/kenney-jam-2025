@@ -74,9 +74,25 @@ namespace KJ25.Vehicles {
       }
 
       private bool TryUpdateToKinematic() {
-         _rigidbody.isKinematic = Power > 0 || CurrentSpeed > 0;
+         var shouldBeKinematic = ShouldBeKinematic();
+
+         if (shouldBeKinematic != _rigidbody.isKinematic) {
+            _rigidbody.isKinematic = shouldBeKinematic;
+            if (!_rigidbody.isKinematic) {
+               _rigidbody.linearVelocity = transform.forward * CurrentSpeed;
+            }
+         }
 
          return _rigidbody.isKinematic;
+      }
+
+      private bool ShouldBeKinematic() {
+         if (!_currentTrackChunk) return false;
+
+         if (Power > 0) return true;
+         if (CurrentSpeed > 1) return true;
+
+         return false;
       }
    }
 }

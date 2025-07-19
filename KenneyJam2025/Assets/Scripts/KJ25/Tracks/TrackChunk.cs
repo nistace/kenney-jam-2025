@@ -9,7 +9,12 @@ namespace KJ25.Tracks {
       [SerializeField] private TrackChunk _nextChunk;
 
       public float CurveLength => _curveLength;
-      public TrackChunk NextChunk => _nextChunk;
+      public Transform NextChunkAnchor => _nextChunkAnchor;
+
+      public TrackChunk NextChunk {
+         get => _nextChunk;
+         set => _nextChunk = value;
+      }
 
       public bool TryGetInfoAtDistance(float distance, out Vector3 worldPosition, out Vector3 worldTangent, out Vector3 worldUp) {
          var clampedDistance = Mathf.Clamp(distance, 0, _curveLength);
