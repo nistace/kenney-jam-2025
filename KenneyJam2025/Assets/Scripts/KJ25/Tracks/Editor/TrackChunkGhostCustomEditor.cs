@@ -6,7 +6,6 @@ namespace KJ25.Tracks.Editor {
    [CustomEditor(typeof(TrackChunkGhost))]
    public class TrackChunkGhostCustomEditor : UnityEditor.Editor {
       private static TrackChunk TrackChunk { get; set; }
-      private static Material GhostMaterial { get; set; }
 
       public override void OnInspectorGUI() {
          base.OnInspectorGUI();
@@ -19,13 +18,19 @@ namespace KJ25.Tracks.Editor {
 
          GUILayout.Label("Editor");
          TrackChunk = EditorGUILayout.ObjectField("Source Chunk", TrackChunk, typeof(TrackChunk), true) as TrackChunk;
-         GhostMaterial = EditorGUILayout.ObjectField("Ghost Material", GhostMaterial, typeof(Material), true) as Material;
 
-         if (TrackChunk && GhostMaterial && GUILayout.Button("Generate")) {
+         if (TrackChunk && GUILayout.Button("Generate")) {
             Undo.RecordObject(ghost, "Generate Ghost");
 
-            while (ghost.transform.childCount > 0) {
-               Undo.DestroyObjectImmediate(ghost.transform.GetChild(0).gameObject);
+            var indexToDestroy = 0;
+            while (ghost.transform.childCount > indexToDestroy) {
+               var child = ghost.transform.GetChild(indexToDestroy);
+               if (child.GetComponent<Renderer>()) {
+                  Undo.DestroyObjectImmediate(child.gameObject);
+               }
+               else {
+                  indexToDestroy++;
+               }
             }
 
             var instance = Instantiate(TrackChunk.gameObject, ghost.transform);
@@ -41,20 +46,19 @@ namespace KJ25.Tracks.Editor {
             var renderersProperty = serializedObject.FindProperty("_renderers");
             renderersProperty.arraySize = allRenderers.Length;
 
+            var ghostMaterial = serializedObject.FindProperty("_ghostValidMaterial").objectReferenceValue as Material;
+
             for (var index = 0; index < allRenderers.Length; index++) {
                var renderer = allRenderers[index];
-               renderer.sharedMaterials = new[] { GhostMaterial };
+               renderer.sharedMaterials = new[] { ghostMaterial };
                renderersProperty.GetArrayElementAtIndex(index).objectReferenceValue = renderer;
                renderer.transform.SetParent(ghost.transform);
             }
 
             serializedObject.ApplyModifiedProperties();
 
-            for (var childIndex = 0; childIndex < ghost.transform.childCount; childIndex++) {
-               if (!ghost.transform.GetChild(childIndex).TryGetComponent<Renderer>(out _)) {
-                  DestroyImmediate(ghost.transform.GetChild(childIndex).gameObject);
-                  childIndex--;
-               }
+            if (!instance.GetComponent<Renderer>()) {
+               DestroyImmediate(instance);
             }
          }
       }

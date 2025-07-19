@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2065890669664589764, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
       propertyPath: m_Name
-      value: TrackChunk_FL1Loop
+      value: TrackChunk_FR1Loop
       objectReference: {fileID: 0}
     - target: {fileID: 3023120338625768931, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
       propertyPath: _curveLength
@@ -118,11 +118,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3596571593464943438, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[1].Rotation.value.w
-      value: -0.000000043711402
+      value: 1.9106857e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596571593464943438, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
+      propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[1].Rotation.value.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3596571593464943438, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[1].Rotation.value.y
-      value: 1
+      value: -0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596571593464943438, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
+      propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[1].Rotation.value.z
+      value: -0.000000043711392
       objectReference: {fileID: 0}
     - target: {fileID: 3596571593464943438, guid: c3028cd92fc6688428a61303b1d8beab, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[2].Rotation.value.w

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using KJ25.Levels;
 using KJ25.Tracks;
 using UnityEngine;
@@ -18,12 +19,11 @@ namespace KJ25.GameControllers {
 
       [SerializeField] private LevelsInfo _levelsInfo;
       [SerializeField] private Camera _camera;
+      [SerializeField] private GameLevelSpawner _levelSpawner;
       [SerializeField] private LayerMask _interactLayerMask;
       [SerializeField] private InputActionReference _pointActionReference;
       [SerializeField] private InputActionReference _clickActionReference;
       [SerializeField] private InputActionReference _quickLaunchActionReference;
-      [SerializeField] private float _spawnDurationPerItem = .2f;
-      [SerializeField] private float _spawnTotalDuration = 1;
 
       private State CurrentState { get; set; }
       private int CurrentLevelIndex { get; set; }
@@ -65,14 +65,12 @@ namespace KJ25.GameControllers {
          CurrentLevel.Finish.OnEntered.AddListener(HandleCurrentLevelFinishEntered);
          CurrentLevel.LaunchButton.OnConsumed.AddListener(HandleLaunchButtonConsumed);
 
+         _levelSpawner.Spawn(CurrentLevel, StartBuilderState).Forget();
          ChangeState(State.SpawningLevel);
-
          OnCurrentLevelChanged.Invoke(levelInfo, CurrentLevel);
+      }
 
-         foreach (var child in CurrentLevel.GetAllChildrenInRandomOrder()) {
-            child.transform.localScale = Vector3.one;
-         }
-
+      private void StartBuilderState() {
          ChangeState(State.Building);
       }
 
@@ -91,8 +89,11 @@ namespace KJ25.GameControllers {
       private void HandleCurrentLevelFinishEntered() {
          CurrentLevel.Finish.OnEntered.RemoveListener(HandleCurrentLevelFinishEntered);
 
+         _levelSpawner.Despawn(CurrentLevel, ContinueToNextLevel).Forget();
          ChangeState(State.DespawningLevel);
+      }
 
+      private void ContinueToNextLevel() {
          Destroy(CurrentLevel.gameObject);
 
          CurrentLevelIndex++;

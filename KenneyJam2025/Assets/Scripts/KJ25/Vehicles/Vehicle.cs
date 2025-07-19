@@ -8,12 +8,25 @@ namespace KJ25.Vehicles {
       [SerializeField] private VehicleData _vehicleData;
       [SerializeField] private TrackChunk _currentTrackChunk;
 
+      private bool Launched { get; set; }
       private float DistanceOnCurrentTrackChunk { get; set; }
       public float CurrentSpeed { get; private set; }
       private float Power { get; set; }
 
+      public void Respawn(TrackChunk spawnTrackChunk) {
+         _currentTrackChunk = spawnTrackChunk;
+         DistanceOnCurrentTrackChunk = 0;
+         TryRefreshPositionOnCurrentTrackChunk();
+         Launched = false;
+         _rigidbody.linearVelocity = Vector3.zero;
+         _rigidbody.angularVelocity = Vector3.zero;
+      }
+
       [ContextMenu("Launch")]
-      public void Launch() => PowerUp();
+      public void Launch() {
+         Launched = true;
+         PowerUp();
+      }
 
       public void PowerUp() {
          CurrentSpeed = _vehicleData.MaxSpeed;
@@ -22,6 +35,7 @@ namespace KJ25.Vehicles {
 
       private void FixedUpdate() {
          if (!TryUpdateToKinematic()) return;
+         if (!Launched) return;
 
          UpdatePowerAndSpeed();
          UpdatePosition();
@@ -37,19 +51,25 @@ namespace KJ25.Vehicles {
                _currentTrackChunk = _currentTrackChunk.NextChunk;
             }
 
-            if (_currentTrackChunk && _currentTrackChunk.TryGetInfoAtDistance(DistanceOnCurrentTrackChunk, out var position, out var tangent, out var up)) {
-               transform.position = position;
-               if (tangent != Vector3.zero && up != Vector3.zero) {
-                  transform.rotation = Quaternion.LookRotation(tangent, up);
-               }
-            }
-            else {
+            if (!TryRefreshPositionOnCurrentTrackChunk()) {
                transform.position += transform.forward * DistanceOnCurrentTrackChunk;
             }
          }
          else {
             transform.position += transform.forward * distanceTraveled;
          }
+      }
+
+      private bool TryRefreshPositionOnCurrentTrackChunk() {
+         if (_currentTrackChunk && _currentTrackChunk.TryGetInfoAtDistance(DistanceOnCurrentTrackChunk, out var position, out var tangent, out var up)) {
+            transform.position = position;
+            if (tangent != Vector3.zero && up != Vector3.zero) {
+               transform.rotation = Quaternion.LookRotation(tangent, up);
+            }
+            return true;
+         }
+
+         return false;
       }
 
       private void UpdatePowerAndSpeed() {
@@ -87,6 +107,8 @@ namespace KJ25.Vehicles {
       }
 
       private bool ShouldBeKinematic() {
+         if (!Launched) return true;
+
          if (!_currentTrackChunk) return false;
 
          if (Power > 0) return true;

@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using KJ25.GameControllers;
 using KJ25.Tracks;
 using KJ25.Vehicles;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace KJ25.Levels {
    public class GameLevel : MonoBehaviour {
-      [SerializeField] private Transform _vehicleSpawn;
       [SerializeField] private LaunchButton _launchButton;
       [SerializeField] private TrackChunk _startTrackChunk;
       [SerializeField] private TrackChunk _endTrackChunk;
       [SerializeField] private Vehicle _playerVehicle;
       [SerializeField] private LevelFinish _finish;
 
-      public Transform VehicleSpawn => _vehicleSpawn;
+      [SerializeField] private SpawnData _spawnData;
+      [SerializeField] private SpawnData _despawnData;
+
       public LaunchButton LaunchButton => _launchButton;
       public Vehicle PlayerVehicle => _playerVehicle;
       public LevelFinish Finish => _finish;
@@ -31,10 +34,13 @@ namespace KJ25.Levels {
          for (var childIndex = 0; childIndex < transform.childCount; childIndex++) {
             transform.GetChild(childIndex).localScale = Vector3.zero;
          }
+
+         _playerVehicle.transform.SetParent(transform);
+         _playerVehicle.Respawn(_startTrackChunk);
       }
 
-      public IEnumerable<Transform> GetAllChildrenInRandomOrder() => Enumerable.Range(0, transform.childCount).Select(t => transform.GetChild(t)).OrderBy(_ => Random.value);
-      
+      public List<Transform> GetChildrenForSpawn() => _spawnData.GenerateRandomizedListOfChildren(transform);
+      public List<Transform> GetChildrenForDespawn() => _despawnData.GenerateRandomizedListOfChildren(transform);
 
       public void AppendTrackChunk(TrackChunkAmount trackChunkAmount) {
          var lastChunk = EvaluateLastChunk();
@@ -49,7 +55,7 @@ namespace KJ25.Levels {
 
          PlacedTrackChunks.Add(newTrackChunk);
          PlacedTrackChunkAmounts.Add(trackChunkAmount);
-         UpdateCurrentGhostTransform();
+         UpdateCurrentGhost();
       }
 
       public void RemoveLastTrackChunk() {
@@ -62,7 +68,7 @@ namespace KJ25.Levels {
          PlacedTrackChunkAmounts.RemoveAt(PlacedTrackChunkAmounts.Count - 1);
 
          EvaluateLastChunk().NextChunk = null;
-         UpdateCurrentGhostTransform();
+         UpdateCurrentGhost();
 
          Destroy(lastTrackChunk.gameObject);
       }
@@ -78,7 +84,7 @@ namespace KJ25.Levels {
          chunkGhost.gameObject.SetActive(true);
          CurrentGhostPrefab = chunkGhostPrefab;
 
-         UpdateCurrentGhostTransform();
+         UpdateCurrentGhost();
       }
 
       public void UnsetGhost(TrackChunkGhost chunkGhostPrefab = null) {
@@ -92,7 +98,7 @@ namespace KJ25.Levels {
          }
       }
 
-      private void UpdateCurrentGhostTransform() {
+      private void UpdateCurrentGhost() {
          if (CurrentGhostPrefab == null) {
             return;
          }
@@ -105,6 +111,24 @@ namespace KJ25.Levels {
 
          chunkGhost.transform.position = lastChunk.NextChunkAnchor.position;
          chunkGhost.transform.rotation = lastChunk.NextChunkAnchor.rotation;
+
+         chunkGhost.RefreshValid();
+      }
+
+      [Serializable]
+      private class SpawnData {
+         [SerializeField] private Transform[] _spawnedFirst;
+         [SerializeField] private Transform[] _spawnedLast;
+
+         public List<Transform> GenerateRandomizedListOfChildren(Transform parent) {
+            var result = new List<Transform>();
+
+            result.AddRange(_spawnedFirst);
+            result.AddRange(Enumerable.Range(0, parent.childCount).Select(parent.GetChild).Except(_spawnedFirst).Except(_spawnedLast));
+            result.AddRange(_spawnedLast);
+
+            return result;
+         }
       }
    }
 }
