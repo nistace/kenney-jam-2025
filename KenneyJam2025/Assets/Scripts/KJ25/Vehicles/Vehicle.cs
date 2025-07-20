@@ -26,9 +26,7 @@ namespace KJ25.Vehicles {
             _rigidbody.angularVelocity = Vector3.zero;
          }
 
-         if (_previousTrackChunk) {
-            _previousTrackChunk.SetCollidersEnabled(true);
-         }
+         SetPreviousChunkCollidersEnabled(true);
       }
 
       [ContextMenu("Launch")]
@@ -109,9 +107,7 @@ namespace KJ25.Vehicles {
          if (shouldBeKinematic != _rigidbody.isKinematic) {
             _rigidbody.isKinematic = shouldBeKinematic;
             if (!_rigidbody.isKinematic) {
-               if (_previousTrackChunk) {
-                  _previousTrackChunk.SetCollidersEnabled(false);
-               }
+               SetPreviousChunkCollidersEnabled(false);
                _rigidbody.linearVelocity = transform.forward * CurrentSpeed;
             }
          }
@@ -128,6 +124,16 @@ namespace KJ25.Vehicles {
          if (CurrentSpeed > 1) return true;
 
          return false;
+      }
+
+      private void SetPreviousChunkCollidersEnabled(bool enable) {
+         if (!_previousTrackChunk) return;
+
+         _previousTrackChunk.SetCollidersEnabled(enable);
+
+         if (!_previousTrackChunk.NextChunk) return;
+
+         _previousTrackChunk.NextChunk.SetCollidersEnabled(enable);
       }
    }
 }
