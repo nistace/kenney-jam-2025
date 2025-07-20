@@ -7,6 +7,8 @@ namespace KJ25.Ui {
       private static readonly int settingsAnimParam = Animator.StringToHash("Settings");
       private static readonly int levelSelectionAnimParam = Animator.StringToHash("LevelSelection");
       private static readonly int levelAnimParam = Animator.StringToHash("Level");
+      private static readonly int titleAnimParam = Animator.StringToHash("Title");
+      private static readonly int thanksAnimParam = Animator.StringToHash("Thanks");
 
       [SerializeField] private Animator _animator;
 
@@ -23,6 +25,8 @@ namespace KJ25.Ui {
          _animator.SetBool(settingsAnimParam, newState is not GameController.State.GameQuit and not GameController.State.Title);
          _animator.SetBool(levelSelectionAnimParam, newState is GameController.State.LevelSelection);
          _animator.SetBool(levelAnimParam, newState is GameController.State.Building or GameController.State.Playing or GameController.State.SpawningLevel);
+         _animator.SetBool(titleAnimParam, newState is GameController.State.Title or GameController.State.LevelSelection or GameController.State.Thanks);
+         _animator.SetBool(thanksAnimParam, newState is GameController.State.Thanks);
       }
    }
 }

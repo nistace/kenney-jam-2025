@@ -13,6 +13,7 @@ namespace KJ25.GameControllers {
       public enum State {
          Title = 6,
          GameQuit = 5,
+         Thanks = 7,
          LevelSelection = 0,
          SpawningLevel = 1,
          Building = 2,
@@ -46,6 +47,14 @@ namespace KJ25.GameControllers {
          foreach (var debugLevel in FindObjectsByType<GameLevel>(FindObjectsInactive.Include, FindObjectsSortMode.None)) {
             Destroy(debugLevel.gameObject);
          }
+         StartTitle().Forget();
+      }
+
+      private async UniTaskVoid StartTitle() {
+         ChangeState(State.Title);
+
+         await UniTask.WaitForSeconds(1, cancellationToken: destroyCancellationToken);
+
          StartLevelSelection();
       }
 
@@ -116,7 +125,13 @@ namespace KJ25.GameControllers {
       private void ContinueToNextLevel() {
          CleanUpCurrentLevel();
 
-         SpawnLevel((CurrentLevelIndex + 1) % _levelsInfo.Levels.Count);
+         var nextLevelIndex = CurrentLevelIndex + 1;
+         if (nextLevelIndex >= _levelsInfo.Levels.Count) {
+            ChangeState(State.Thanks);
+            return;
+         }
+
+         SpawnLevel(nextLevelIndex);
       }
 
       private void SpawnCurrentLevel() => SpawnLevel(CurrentLevelIndex);
