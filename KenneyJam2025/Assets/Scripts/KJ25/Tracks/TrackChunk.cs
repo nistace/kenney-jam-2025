@@ -50,5 +50,11 @@ namespace KJ25.Tracks {
             Gizmos.DrawSphere(Vector3.zero, .3f);
          }
       }
+
+      public void SetCollidersEnabled(bool enable) {
+         foreach (var colliderToDisable in GetComponentsInChildren<Collider>()) {
+            colliderToDisable.enabled = enable;
+         }
+      }
    }
 }

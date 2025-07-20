@@ -17,9 +17,10 @@ namespace KJ25.Cameras {
       private void HandleGameStateChanged(GameController.State newState) {
          var currentLevel = GameController.Instance.CurrentLevel;
          if (currentLevel) {
-            currentLevel.WholeLevelCameraAnchor.enabled = newState is GameController.State.SpawningLevel or GameController.State.DespawningLevel;
-            currentLevel.BuildCamera.enabled = newState == GameController.State.Building;
-            currentLevel.VehicleCamera.enabled = newState == GameController.State.Playing;
+            currentLevel.WholeLevelCameraAnchor.enabled =
+               newState is GameController.State.SpawningLevel or GameController.State.DespawningLevel or GameController.State.Building or GameController.State.Playing;
+            currentLevel.BuildCamera.enabled = false;
+            currentLevel.VehicleCamera.enabled = false;
          }
 
          _titleCamera.enabled = newState == GameController.State.LevelSelection;

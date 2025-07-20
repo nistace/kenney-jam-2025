@@ -356,10 +356,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4889778965333138252, guid: c9723fc5d61f5084788ea6d2fd3f4057, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 4f01691762105a744b759c47bc4bb857, type: 2}
     - target: {fileID: 6098511631677496959, guid: c9723fc5d61f5084788ea6d2fd3f4057, type: 3}
       propertyPath: m_Name
       value: PowerUpGate

@@ -38,7 +38,12 @@ namespace KJ25.GameControllers {
          Instance = this;
       }
 
-      private void Start() => SpawnLevel(0);
+      private void Start() {
+         foreach (var debugLevel in FindObjectsByType<GameLevel>(FindObjectsInactive.Include, FindObjectsSortMode.None)) {
+            Destroy(debugLevel.gameObject);
+         }
+         SpawnLevel(0);
+      }
 
       private void CleanUpCurrentLevel() {
          if (CurrentLevel) {
@@ -75,10 +80,13 @@ namespace KJ25.GameControllers {
       }
 
       private void HandleCurrentLevelFinishEntered() {
+         if (CurrentState != State.Playing) return;
+
          DespawnCurrentLevel(ContinueToNextLevel);
       }
 
       private void DespawnCurrentLevel(UnityAction then) {
+         Debug.Log("Despawn Current Level");
          _levelSpawner.Despawn(CurrentLevel, then).Forget();
 
          ChangeState(State.DespawningLevel);

@@ -17,8 +17,8 @@ TagManager:
   - Finish
   - GhostColliders
   - Obstacles
-  - 
-  - 
+  - TrackPlacementObstacles
+  - VehicleObstacles
   - 
   - 
   - 

@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.84313726}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -265,7 +265,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.7, y: 0.5, z: 0.7}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3664983742184940729
 MonoBehaviour:
@@ -287,6 +287,7 @@ MonoBehaviour:
   - {fileID: 5502110497354120946}
   _interactableMaterial: {fileID: 2100000, guid: 685d2c62aff4f644c8f2a28bc06a1d30, type: 2}
   _notInteractableMaterial: {fileID: 2100000, guid: bde88c324007c9047a9560a5614f2d66, type: 2}
+  _cooldown: 0.1
 --- !u!95 &3879448870606120946
 Animator:
   serializedVersion: 7

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -15,6 +16,10 @@ namespace KJ25.PowerUps {
       [SerializeField] private AnimationCurve _collectedEmissionCurve;
 
       private CancellationTokenSource _animationCancellationTokenSource;
+
+      private void Start() {
+         ResetPower(true);
+      }
 
       private void OnDestroy() {
          _animationCancellationTokenSource?.Cancel();

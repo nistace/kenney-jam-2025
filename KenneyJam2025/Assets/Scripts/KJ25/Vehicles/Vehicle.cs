@@ -8,6 +8,8 @@ namespace KJ25.Vehicles {
       [SerializeField] private VehicleData _vehicleData;
       [SerializeField] private TrackChunk _currentTrackChunk;
 
+      private TrackChunk _previousTrackChunk;
+
       private bool Launched { get; set; }
       private float DistanceOnCurrentTrackChunk { get; set; }
       public float CurrentSpeed { get; private set; }
@@ -22,6 +24,10 @@ namespace KJ25.Vehicles {
          if (!_rigidbody.isKinematic) {
             _rigidbody.linearVelocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
+         }
+
+         if (_previousTrackChunk) {
+            _previousTrackChunk.SetCollidersEnabled(true);
          }
       }
 
@@ -51,6 +57,7 @@ namespace KJ25.Vehicles {
 
             while (_currentTrackChunk && DistanceOnCurrentTrackChunk > _currentTrackChunk.CurveLength) {
                DistanceOnCurrentTrackChunk -= _currentTrackChunk.CurveLength;
+               _previousTrackChunk = _currentTrackChunk;
                _currentTrackChunk = _currentTrackChunk.NextChunk;
             }
 
@@ -102,6 +109,9 @@ namespace KJ25.Vehicles {
          if (shouldBeKinematic != _rigidbody.isKinematic) {
             _rigidbody.isKinematic = shouldBeKinematic;
             if (!_rigidbody.isKinematic) {
+               if (_previousTrackChunk) {
+                  _previousTrackChunk.SetCollidersEnabled(false);
+               }
                _rigidbody.linearVelocity = transform.forward * CurrentSpeed;
             }
          }

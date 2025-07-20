@@ -7,6 +7,7 @@ using KJ25.Vehicles;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 namespace KJ25.Levels {
    public class GameLevel : MonoBehaviour {
@@ -165,7 +166,7 @@ namespace KJ25.Levels {
             var result = new List<Transform>();
 
             result.AddRange(_spawnedFirst);
-            result.AddRange(Enumerable.Range(0, parent.childCount).Select(parent.GetChild).Except(_spawnedFirst).Except(_spawnedLast).Except(_notToSpawn));
+            result.AddRange(Enumerable.Range(0, parent.childCount).Select(parent.GetChild).Except(_spawnedFirst).Except(_spawnedLast).Except(_notToSpawn).OrderBy(_ => Random.value));
             result.AddRange(_spawnedLast);
 
             return result;

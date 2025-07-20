@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace KJ25.GameControllers._3DButtons {
@@ -26,6 +27,13 @@ namespace KJ25.GameControllers._3DButtons {
       }
 
       private void Update() {
+         if (EventSystem.current.IsPointerOverGameObject()) {
+            PointerHitObject = null;
+            HoveredOverInteractable?.HandlePointerExit();
+            HoveredOverInteractable = null;
+            return;
+         }
+
          var inputPointPosition = _pointActionReference.action.ReadValue<Vector2>();
          if (Physics.Raycast(_camera.ScreenPointToRay(inputPointPosition), out var hit, _interactLayerMask)) {
             if (PointerHitObject != hit.collider.gameObject) {
