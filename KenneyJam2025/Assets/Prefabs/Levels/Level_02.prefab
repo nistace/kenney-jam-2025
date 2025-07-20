@@ -413,6 +413,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
+      propertyPath: _levelInfo
+      value: Some objects like trees, walls, and your own tracks can block your path.<br>If
+        your car gets stuck, press R to return it to the start and try again.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
+      propertyPath: _levelName
+      value: Watch out for obstacles
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
       propertyPath: _trackChunkAmounts.Array.size
       value: 4
       objectReference: {fileID: 0}

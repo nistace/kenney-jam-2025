@@ -295,6 +295,17 @@ PrefabInstance:
       value: 0.1492706
       objectReference: {fileID: 0}
     - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
+      propertyPath: _levelInfo
+      value: "Your car slows down over time because it needs energy! Drive through
+        power arches to recharge \u2014 but each one only works once, so plan your
+        path carefully.<br>Want to restart the whole level? Press BACKSPACE to give
+        it another go."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
+      propertyPath: _levelName
+      value: Keep it powered
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
       propertyPath: _trackChunkAmounts.Array.size
       value: 2
       objectReference: {fileID: 0}

@@ -11,6 +11,9 @@ using Random = UnityEngine.Random;
 
 namespace KJ25.Levels {
    public class GameLevel : MonoBehaviour {
+      [SerializeField] private string _levelName;
+      [SerializeField] private string _levelInfo;
+
       [Header("Cameras")]
       [SerializeField] private CinemachineCamera _wholeLevelCameraAnchor;
       [SerializeField] private CinemachineCamera _vehicleCamera;
@@ -30,6 +33,9 @@ namespace KJ25.Levels {
       [SerializeField] private SpawnData _despawnData;
       [SerializeField] private UnityEvent<TrackChunkAmount> _onTrackChunkAdded = new UnityEvent<TrackChunkAmount>();
       [SerializeField] private UnityEvent<TrackChunkAmount> _onTrackChunkRemoved = new UnityEvent<TrackChunkAmount>();
+
+      public string LevelName => _levelName;
+      public string LevelInfo => _levelInfo;
 
       public CinemachineCamera WholeLevelCameraAnchor => _wholeLevelCameraAnchor;
       public CinemachineCamera VehicleCamera => _vehicleCamera;

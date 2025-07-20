@@ -91,6 +91,15 @@ PrefabInstance:
       value: 14.4
       objectReference: {fileID: 0}
     - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
+      propertyPath: _levelInfo
+      value: "You don\u2019t need to use every piece to finish a level.<br>In fact,
+        your car can even reach the goal by going a little off-road!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
+      propertyPath: _levelName
+      value: Think outside the track
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
       propertyPath: _trackChunkAmounts.Array.size
       value: 1
       objectReference: {fileID: 0}

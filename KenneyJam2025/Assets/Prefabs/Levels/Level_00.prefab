@@ -91,6 +91,15 @@ PrefabInstance:
       value: 14.4
       objectReference: {fileID: 0}
     - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
+      propertyPath: _levelInfo
+      value: "Draw a track from the starting point to the finish line.<br>When you\u2019re
+        ready, press SPACE to set your little car in motion!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
+      propertyPath: _levelName
+      value: "Let\u2019s get rolling!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782351018458539948, guid: 48f4d08cb4ed76e46b54fb7bc6c07316, type: 3}
       propertyPath: _trackChunkAmounts.Array.size
       value: 1
       objectReference: {fileID: 0}
