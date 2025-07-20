@@ -30,7 +30,6 @@ namespace KJ25.GameControllers {
          public async UniTask PerformOnItems(IReadOnlyList<Transform> items, CancellationToken cancellationToken, UnityAction callback) {
             await UniTask.WaitForSeconds(_delay, cancellationToken: cancellationToken);
 
-            Debug.Log($"{Time.time} Start operation after delay {_delay} - {items.Count} items");
             var spawnedAmount = 0;
 
             for (var time = 0f; time < _startDuration + _itemDuration; time += Time.deltaTime) {
@@ -47,13 +46,10 @@ namespace KJ25.GameControllers {
 
             await UniTask.NextFrame(cancellationToken);
 
-            Debug.Log($"{Time.time} Done Operation on {spawnedAmount} (out of {items.Count})");
-
             callback?.Invoke();
          }
 
          public async UniTask PerformOnItem(Transform item, CancellationToken cancellationToken) {
-            Debug.Log($"{Time.time} {item.name}", item);
             for (var t = 0f; item && t < _itemDuration; t += Time.deltaTime) {
                item.localScale = Vector3.one * _itemScaleCurve.Evaluate(t / _itemDuration);
                await UniTask.NextFrame(cancellationToken);

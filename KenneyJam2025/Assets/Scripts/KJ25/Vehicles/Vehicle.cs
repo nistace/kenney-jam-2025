@@ -12,7 +12,9 @@ namespace KJ25.Vehicles {
 
       private bool Launched { get; set; }
       private float DistanceOnCurrentTrackChunk { get; set; }
-      public float CurrentSpeed { get; private set; }
+      private float CurrentKinematicSpeed { get; set; }
+      public float CurrentSpeed => Launched && transform.localScale == Vector3.one ? _rigidbody.isKinematic ? CurrentKinematicSpeed : _rigidbody.linearVelocity.magnitude : 0;
+      public float CurrentSpeedRatio => CurrentSpeed / _vehicleData.MaxSpeed;
       private float Power { get; set; }
 
       public void Respawn(TrackChunk spawnTrackChunk) {
@@ -36,7 +38,7 @@ namespace KJ25.Vehicles {
       }
 
       public void PowerUp() {
-         CurrentSpeed = _vehicleData.MaxSpeed;
+         CurrentKinematicSpeed = _vehicleData.MaxSpeed;
          Power = _vehicleData.MaxPower;
       }
 
@@ -49,7 +51,7 @@ namespace KJ25.Vehicles {
       }
 
       private void UpdatePosition() {
-         var distanceTraveled = CurrentSpeed * Time.deltaTime;
+         var distanceTraveled = CurrentKinematicSpeed * Time.deltaTime;
          if (_currentTrackChunk) {
             DistanceOnCurrentTrackChunk += distanceTraveled;
 
@@ -86,7 +88,7 @@ namespace KJ25.Vehicles {
          var expectedDeceleration = _vehicleData.TransformDecelerationWithVerticalAngle(defaultDeceleration, angleWithUp);
 
          if (expectedDeceleration < 0) {
-            CurrentSpeed = Mathf.MoveTowards(CurrentSpeed, _vehicleData.MaxSpeed, -expectedDeceleration);
+            CurrentKinematicSpeed = Mathf.MoveTowards(CurrentKinematicSpeed, _vehicleData.MaxSpeed, -expectedDeceleration);
             return;
          }
 
@@ -97,7 +99,7 @@ namespace KJ25.Vehicles {
             return;
          }
 
-         CurrentSpeed -= expectedDeceleration - Power / _vehicleData.PowerForSpeedCost;
+         CurrentKinematicSpeed -= expectedDeceleration - Power / _vehicleData.PowerForSpeedCost;
          Power = 0;
       }
 
@@ -108,7 +110,7 @@ namespace KJ25.Vehicles {
             _rigidbody.isKinematic = shouldBeKinematic;
             if (!_rigidbody.isKinematic) {
                SetPreviousChunkCollidersEnabled(false);
-               _rigidbody.linearVelocity = transform.forward * CurrentSpeed;
+               _rigidbody.linearVelocity = transform.forward * CurrentKinematicSpeed;
             }
          }
 
@@ -121,7 +123,7 @@ namespace KJ25.Vehicles {
          if (!_currentTrackChunk) return false;
 
          if (Power > 0) return true;
-         if (CurrentSpeed > 1) return true;
+         if (CurrentKinematicSpeed > 1) return true;
 
          return false;
       }

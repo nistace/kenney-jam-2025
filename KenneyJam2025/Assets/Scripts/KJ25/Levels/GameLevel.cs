@@ -28,6 +28,8 @@ namespace KJ25.Levels {
       [Header("Animated")]
       [SerializeField] private SpawnData _spawnData;
       [SerializeField] private SpawnData _despawnData;
+      [SerializeField] private UnityEvent<TrackChunkAmount> _onTrackChunkAdded = new UnityEvent<TrackChunkAmount>();
+      [SerializeField] private UnityEvent<TrackChunkAmount> _onTrackChunkRemoved = new UnityEvent<TrackChunkAmount>();
 
       public CinemachineCamera WholeLevelCameraAnchor => _wholeLevelCameraAnchor;
       public CinemachineCamera VehicleCamera => _vehicleCamera;
@@ -41,8 +43,8 @@ namespace KJ25.Levels {
       private TrackChunkGhost CurrentGhostPrefab { get; set; }
       public IReadOnlyList<TrackChunkAmount> TrackChunkAmounts => _trackChunkAmounts;
 
-      public UnityEvent<TrackChunkAmount> OnTrackChunkAdded { get; } = new UnityEvent<TrackChunkAmount>();
-      public UnityEvent<TrackChunkAmount> OnTrackChunkRemoved { get; } = new UnityEvent<TrackChunkAmount>();
+      public UnityEvent<TrackChunkAmount> OnTrackChunkAdded => _onTrackChunkAdded;
+      public UnityEvent<TrackChunkAmount> OnTrackChunkRemoved => _onTrackChunkRemoved;
       public UnityEvent OnTrackChanged { get; } = new UnityEvent();
 
       private TrackChunk EvaluateLastChunk() => PlacedTrackChunks.Count > 0 ? PlacedTrackChunks.Last() : _startTrackChunk;
@@ -53,7 +55,6 @@ namespace KJ25.Levels {
          }
 
          _playerVehicle.transform.SetParent(transform);
-         ResetGameLevel();
       }
 
       public List<Transform> GetChildrenForSpawn() => _spawnData.GenerateRandomizedListOfChildren(transform);

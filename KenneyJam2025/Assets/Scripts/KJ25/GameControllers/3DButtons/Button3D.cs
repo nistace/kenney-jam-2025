@@ -1,5 +1,6 @@
 ﻿using KJ25.Levels;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace KJ25.GameControllers._3DButtons {
@@ -15,6 +16,10 @@ namespace KJ25.GameControllers._3DButtons {
       [SerializeField] private Material _interactableMaterial;
       [SerializeField] private Material _notInteractableMaterial;
       [SerializeField] private float _cooldown = .1f;
+      [SerializeField] private UnityEvent _onPointerEntered = new UnityEvent();
+      [SerializeField] private UnityEvent _onPointerExited = new UnityEvent();
+      [SerializeField] private UnityEvent _onInteracted = new UnityEvent();
+      [SerializeField] private UnityEvent _onNotInteractableInteracted = new UnityEvent();
 
       private float NextInteractionTime { get; set; }
       private bool Interactable => GameController.CanPerform(_action);
@@ -53,8 +58,15 @@ namespace KJ25.GameControllers._3DButtons {
 
       private void HandleShortcut(InputAction.CallbackContext obj) => Interact();
 
-      public void HandlePointerEnter() => _animator.SetBool(hoveredAnimParam, true);
-      public void HandlePointerExit() => _animator.SetBool(hoveredAnimParam, false);
+      public void HandlePointerEnter() {
+         _animator.SetBool(hoveredAnimParam, true);
+         _onPointerEntered.Invoke();
+      }
+
+      public void HandlePointerExit() {
+         _animator.SetBool(hoveredAnimParam, false);
+         _onPointerExited.Invoke();
+      }
 
       public void Interact() {
          if (NextInteractionTime > Time.time) {
@@ -62,12 +74,14 @@ namespace KJ25.GameControllers._3DButtons {
          }
 
          if (!Interactable) {
+            _onNotInteractableInteracted.Invoke();
             return;
          }
 
          GameController.Instance.TryPerform(_action);
          _animator.SetTrigger(clickedAnimParam);
          NextInteractionTime = Time.time + _cooldown;
+         _onInteracted.Invoke();
       }
    }
 }

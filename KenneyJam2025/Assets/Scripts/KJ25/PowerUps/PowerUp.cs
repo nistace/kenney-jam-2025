@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 namespace KJ25.PowerUps {
@@ -14,12 +15,9 @@ namespace KJ25.PowerUps {
       [SerializeField] private Color _fadeEmissionColor = Color.black;
       [SerializeField] private AnimationCurve _emissionCurve;
       [SerializeField] private AnimationCurve _collectedEmissionCurve;
+      [SerializeField] private UnityEvent _onTriggered = new UnityEvent();
 
       private CancellationTokenSource _animationCancellationTokenSource;
-
-      private void Start() {
-         ResetPower(true);
-      }
 
       private void OnDestroy() {
          _animationCancellationTokenSource?.Cancel();
@@ -72,6 +70,7 @@ namespace KJ25.PowerUps {
 
          otherAsPowerReceiver.PowerUp();
          enabled = false;
+         _onTriggered.Invoke();
       }
    }
 }

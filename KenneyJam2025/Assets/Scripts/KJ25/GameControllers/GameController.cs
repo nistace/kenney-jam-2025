@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using KJ25.Levels;
+using KJ25.Saving;
 using KJ25.Tracks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,6 +11,8 @@ namespace KJ25.GameControllers {
       public static GameController Instance { get; private set; }
 
       public enum State {
+         Title = 6,
+         GameQuit = 5,
          LevelSelection = 0,
          SpawningLevel = 1,
          Building = 2,
@@ -27,7 +30,8 @@ namespace KJ25.GameControllers {
       [SerializeField] private LevelsInfo _levelsInfo;
       [SerializeField] private GameLevelSpawner _levelSpawner;
 
-      private State CurrentState { get; set; }
+      public LevelsInfo LevelsInfo => _levelsInfo;
+      public State CurrentState { get; private set; }
       private int CurrentLevelIndex { get; set; }
       public GameLevel CurrentLevel { get; private set; }
       public static UnityEvent<int, GameLevel> OnCurrentLevelChanged { get; } = new UnityEvent<int, GameLevel>();
@@ -42,7 +46,13 @@ namespace KJ25.GameControllers {
          foreach (var debugLevel in FindObjectsByType<GameLevel>(FindObjectsInactive.Include, FindObjectsSortMode.None)) {
             Destroy(debugLevel.gameObject);
          }
-         SpawnLevel(0);
+         StartLevelSelection();
+      }
+
+      public void StartLevelSelection() {
+         CleanUpCurrentLevel();
+
+         ChangeState(State.LevelSelection);
       }
 
       private void CleanUpCurrentLevel() {
@@ -53,7 +63,7 @@ namespace KJ25.GameControllers {
          }
       }
 
-      private void SpawnLevel(int index) {
+      public void SpawnLevel(int index) {
          CleanUpCurrentLevel();
 
          CurrentLevelIndex = index;
@@ -64,6 +74,11 @@ namespace KJ25.GameControllers {
          _levelSpawner.Spawn(CurrentLevel, StartBuilderState).Forget();
          ChangeState(State.SpawningLevel);
          OnCurrentLevelChanged.Invoke(CurrentLevelIndex, CurrentLevel);
+      }
+
+      public void QuitGame() {
+         DespawnCurrentLevel(Application.Quit);
+         ChangeState(State.GameQuit);
       }
 
       private void HandleTrackChanged() => OnCurrentLevelTrackChanged.Invoke(CurrentLevel);
@@ -82,20 +97,26 @@ namespace KJ25.GameControllers {
       private void HandleCurrentLevelFinishEntered() {
          if (CurrentState != State.Playing) return;
 
+         SaveManager.SetUnlockedLevelIndex(CurrentLevelIndex + 1);
+
          DespawnCurrentLevel(ContinueToNextLevel);
       }
 
       private void DespawnCurrentLevel(UnityAction then) {
-         Debug.Log("Despawn Current Level");
-         _levelSpawner.Despawn(CurrentLevel, then).Forget();
-
          ChangeState(State.DespawningLevel);
+
+         if (CurrentLevel) {
+            _levelSpawner.Despawn(CurrentLevel, then).Forget();
+         }
+         else {
+            then?.Invoke();
+         }
       }
 
       private void ContinueToNextLevel() {
          CleanUpCurrentLevel();
 
-         SpawnLevel((CurrentLevelIndex + 1) % _levelsInfo.Levels.Length);
+         SpawnLevel((CurrentLevelIndex + 1) % _levelsInfo.Levels.Count);
       }
 
       private void SpawnCurrentLevel() => SpawnLevel(CurrentLevelIndex);
