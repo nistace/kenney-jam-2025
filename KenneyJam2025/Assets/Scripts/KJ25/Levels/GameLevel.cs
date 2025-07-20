@@ -78,7 +78,7 @@ namespace KJ25.Levels {
 
          lastChunk.NextChunk = newTrackChunk;
 
-         if (newTrackChunk.NextChunkAnchor.transform.position == _endTrackChunk.transform.position) {
+         if (_endTrackChunk && newTrackChunk.NextChunkAnchor.transform.position == _endTrackChunk.transform.position) {
             newTrackChunk.NextChunk = _endTrackChunk;
          }
 
